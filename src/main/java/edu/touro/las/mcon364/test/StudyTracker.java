@@ -50,16 +50,19 @@ public class StudyTracker {
      * This operation should be undoable.
      */
     public boolean addScore(String name, int score) {
-       if(score<0 || score>100){
-           throw new IllegalArgumentException("score is out of range");
-       }
+        if(score<0 || score>100){
+            throw new IllegalArgumentException("score is null or empty");
+        }
+        var scoresOpt=scoresFor(name);
+      if(scoresOpt.isEmpty())
+          return false;
 
-        scoresByLearner.get(name).add(score);
-       UndoStep undoStep = (getRidOfScore)->{
-           getRidOfScore
+
+       UndoStep undoStep = ()->{
+           scoresByLearner.get(name).remove(score);
        };
-
-
+       undoStack.addFirst(undoStep);
+       return true;
     }
 
     /**
@@ -71,12 +74,15 @@ public class StudyTracker {
      * - the learner has no scores
      */
     public Optional<Double> averageFor(String name) {
-        var Optname=Optional.ofNullable(scoresFor(name));
-       if(Optname.isEmpty())
+        var optScores=scoresFor(name);
+       if(optScores.isEmpty())
            return Optional.empty();
-        else
-
-
+       List<Integer> scores=optScores.get();
+       if(scores.isEmpty())
+           return Optional.empty();
+   double len= scores.size();
+    int sum=scores.stream().reduce(0, Integer::sum);
+    return Optional.of(sum / len);
     }
 
     /**
@@ -93,7 +99,7 @@ public class StudyTracker {
      * Return Optional.empty() when no average exists.
      */
     public Optional<String> letterBandFor(String name) {
-        throw new UnsupportedOperationException();
+
     }
 
     /**

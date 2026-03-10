@@ -58,9 +58,10 @@ public class BasicStreamsQuiz {
      * Return 0.0 if there are no passing scores.
      */
     public double averagePassingScore() {
-        return scoresByCourse.values().stream()
+        return scoresByCourse.values().stream().
+
               .flatMap(Collection::stream)
-              .filter(x->x>70).sum();
+              .count();
 
 
 
