@@ -12,6 +12,7 @@ public class StudyTracker {
     }
 
     public Set<String> learnerNames() {
+
         return scoresByLearner.keySet();
     }
     /**
@@ -25,7 +26,14 @@ public class StudyTracker {
      * Throw IllegalArgumentException if name is null or blank.
      */
     public boolean addLearner(String name) {
-        throw new UnsupportedOperationException();
+        if(name==null || name.isEmpty()){
+            throw new IllegalArgumentException("name is null or empty");
+        }
+        if(learnerNames().contains(name))
+            return false;
+        scoresByLearner.put(name, new ArrayList<Integer>());
+        return true;
+
     }
 
     /**
@@ -42,7 +50,16 @@ public class StudyTracker {
      * This operation should be undoable.
      */
     public boolean addScore(String name, int score) {
-        throw new UnsupportedOperationException();
+       if(score<0 || score>100){
+           throw new IllegalArgumentException("score is out of range");
+       }
+
+        scoresByLearner.get(name).add(score);
+       UndoStep undoStep = (getRidOfScore)->{
+           getRidOfScore
+       };
+
+
     }
 
     /**
@@ -54,12 +71,18 @@ public class StudyTracker {
      * - the learner has no scores
      */
     public Optional<Double> averageFor(String name) {
-        throw new UnsupportedOperationException();
+        var Optname=Optional.ofNullable(scoresFor(name));
+       if(Optname.isEmpty())
+           return Optional.empty();
+        else
+
+
     }
 
     /**
      * Problem 14
      * Convert a learner average into a letter band.
+     * use a switch statement
      *
      * A: 90+
      * B: 80-89.999...
@@ -81,7 +104,10 @@ public class StudyTracker {
      * Return false if there is nothing to undo.
      */
     public boolean undoLastChange() {
-        throw new UnsupportedOperationException();
+       if(undoStack.isEmpty())
+           return false;
+       undoStack.peek().undo();
+        return true;
     }
 
 
