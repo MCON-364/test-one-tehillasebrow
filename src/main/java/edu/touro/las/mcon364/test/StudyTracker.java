@@ -99,6 +99,7 @@ public class StudyTracker {
      * Return Optional.empty() when no average exists.
      */
     public Optional<String> letterBandFor(String name) {
+        return Optional.empty();
 
     }
 
